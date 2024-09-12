@@ -9,15 +9,11 @@ import java.util.Random;
 import java.util.Scanner;
 
 
+@Setter
+@Getter
 public class gameLogic {
-    @Setter
-    @Getter
     private int difficulty = 2;
-    @Setter
-    @Getter
     private String category;
-    @Setter
-    @Getter
     private int attempts;
 
     public gameLogic(int difficulty, String category) {
@@ -29,7 +25,7 @@ public class gameLogic {
     }
 
     //отбор подходящего списка слов из начального словаря
-    public String[] word_list() {
+    public String[] wordList() {
         gameData dict = new gameData();
         switch (this.difficulty) {
             case 3 -> {
@@ -50,7 +46,7 @@ public class gameLogic {
 
     //метод для получения случайного слова из списка по заданным параметрам
     public String getWord() {
-        String [] chosen_words = word_list();
+        String [] chosen_words = wordList();
         Random random_ind = new Random();
         int index_word = random_ind.nextInt(chosen_words.length);
         return chosen_words[index_word];
@@ -69,15 +65,18 @@ public class gameLogic {
         return res;
     }
 
-    public int game_process(String answer, gameLogic game_settings) {
+    public int gameProcess(String answer, gameLogic game_settings) {
         Scanner scanner = new Scanner(System.in);
         char [] user_predicts = new char[answer.length()];
-        System.out.println(Arrays.toString(user_predicts));
+        System.out.print("Your word");
+        gameStageIllustration(user_predicts);
         while (true) {
+            //gameStageIllustration(user_predicts);
             String current_world = new String(user_predicts);
             if (current_world.equalsIgnoreCase(answer) || game_settings.attempts == 0) {
                 break;
             }
+            drawing(game_settings);
             System.out.println("1 - I ready to guess the whole word");
             System.out.print("2 - I want to guess the letter\n>");
             int current_guess = scanner.nextInt();
@@ -102,34 +101,44 @@ public class gameLogic {
                 game_settings.attempts --;
             }
             System.out.println("Attempts left: " + attempts);
-            System.out.println("Your guests:" + Arrays.toString(user_predicts));
+            System.out.print("Your guests: ");
+            gameStageIllustration(user_predicts);
+            System.out.println();
         }
         return attempts;
     }
 
     public void drawing(gameLogic game_settings) {
-        switch (game_settings.difficulty) {
-            case 1 -> {
-                easyPicture(game_settings.attempts);
+        gameData picture = new gameData();
+        System.out.println(picture.gameVisualStages(game_settings.attempts, game_settings.difficulty));
+    }
+
+//    public void easyPicture(int attempts) {
+//        switch (attempts) {
+//            case 7 -> {
+//
+//            }
+//        }
+//    }
+
+//    public void mediumPicture(int attempts) {
+//        return;
+//    }
+
+//    public void hardPicture(int attempts) {
+//       return;
+//    }
+
+    public void gameStageIllustration(char [] user_predicts) {
+        System.out.println();
+        for (char i : user_predicts) {
+            if (i == '\0') {
+                System.out.print('_' + " ");
             }
-            case 2 -> {
-                mediumPicture(game_settings.attempts);
-            }
-            case 3 -> {
-                hardPicture(game_settings.attempts);
+            else {
+                System.out.print(i + " ");
             }
         }
-    }
-
-    public void easyPicture(int attempts) {
-        return;
-    }
-
-    public void mediumPicture(int attempts) {
-        return;
-    }
-
-    public void hardPicture(int attempts) {
-       return;
+        System.out.println("\n");
     }
 }

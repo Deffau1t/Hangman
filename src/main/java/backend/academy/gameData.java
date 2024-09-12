@@ -61,4 +61,99 @@ public class gameData {
                 return AnimalDictionary; // Returning default dictionary if category is invalid
         }
     }
+
+    public String gameVisualStages(int attempt, int difficulty) {
+
+        // Массив строк для каждой стадии виселицы
+        String[] hangmanStagesEasy = {
+            "=========" + "        \n" + "  |   |\n" + "      |\n" + "      |\n" + "      |\n" + "      |\n" + "=========",
+            "=========" + "        \n" +
+                "  |   |\n" +
+                "  O   |\n" +
+                "      |\n" +
+                "      |\n" +
+                "      |\n" +
+                "=========",
+            "=========" + "       \n" +
+                "  |   |\n" +
+                "  O   |\n" +
+                "  |   |\n" +
+                "      |\n" +
+                "      |\n" +
+                "=========",
+            "=========" + "       \n" +
+                "  |   |\n" +
+                "  O   |\n" +
+                " /|   |\n" +
+                "      |\n" +
+                "      |\n" +
+                "=========",
+            "=========" + "       \n" +
+                "  |   |\n" +
+                "  O   |\n" +
+                " /|\\  |\n" +
+                "      |\n" +
+                "      |\n" +
+                "=========",
+            "=========" + "       \n" +
+                "  |   |\n" +
+                "  O   |\n" +
+                " /|\\  |\n" +
+                " /    |\n" +
+                "      |\n" +
+                "=========",
+            "=========" + "       \n" +
+                "  |   |\n" +
+                "  O   |\n" +
+                " /|\\  |\n" +
+                " / \\  |\n" +
+                "      |\n" +
+                "========="
+            };
+        String[] hangmanStagesHard = {
+            "=========" + "       \n" + "  |   |\n" + "      |\n" + "      |\n" + "      |\n" + "      |\n" + "=========",
+            "=========" + "       \n" +
+                "  |   |\n" +
+                "  O   |\n" +
+                "  |   |\n" +
+                "      |\n" +
+                "      |\n" +
+                "=========",
+            "=========" + "       \n" +
+                "  |   |\n" +
+                "  O   |\n" +
+                " /|   |\n" +
+                "      |\n" +
+                "      |\n" +
+                "=========",
+            "=========" + "       \n" +
+                "  |   |\n" +
+                "  O   |\n" +
+                " /|\\  |\n" +
+                "      |\n" +
+                "      |\n" +
+                "=========",
+            "=========" + "       \n" +
+                "  |   |\n" +
+                "  O   |\n" +
+                " /|\\  |\n" +
+                " /    |\n" +
+                "      |\n" +
+                "=========",
+            "=========" + "       \n" +
+                "  |   |\n" +
+                "  O   |\n" +
+                " /|\\  |\n" +
+                " / \\  |\n" +
+                "      |\n" +
+                "========="
+        };
+        if (difficulty == 1 || difficulty == 2) {
+            return hangmanStagesEasy[hangmanStagesEasy.length - attempt];
+        }
+        else {
+            return hangmanStagesEasy[hangmanStagesHard.length - attempt];
+        }
+    }
 }
+

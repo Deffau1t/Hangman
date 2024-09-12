@@ -1,8 +1,8 @@
 package backend.academy;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
+
+
 public class gameMenu {
     public void start_game() {
         Scanner scanner = new Scanner(System.in);
@@ -22,7 +22,7 @@ public class gameMenu {
         String answer = game_settings.getWord();
 
         System.out.println("You can start guessing:");
-        if (game_settings.game_process(answer, game_settings) > 0) {
+        if (game_settings.gameProcess(answer, game_settings) > 0) {
             System.out.println("Congratulations, you won! My word was " + answer);
         }
         else {
