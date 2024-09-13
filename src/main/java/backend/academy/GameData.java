@@ -3,13 +3,13 @@ package backend.academy;
 import java.util.HashMap;
 import java.util.Map;
 
-public class gameData {
+public class GameData {
     private Map<String, String[]> AnimalDictionary = new HashMap<>();
     private Map<String, String[]> FilmDictionary = new HashMap<>();
     private Map<String, String[]> CountryDictionary = new HashMap<>();
     private Map<String, String[]> BrandDictionary = new HashMap<>();
 
-    public gameData() {
+    public GameData() {
         // Animal Dictionary
         AnimalDictionary = new HashMap<>();
         String[] easy_animal_list = new String[] {"корова", "собака", "кошка", "птица", "рыба"};
@@ -39,27 +39,23 @@ public class gameData {
 
         // Brand Dictionary
         BrandDictionary = new HashMap<>();
-        String[] easy_brand_list = new String[] {"Apple", "Samsung", "Nike", "Coca-Cola", "Adidas"};
+        String[] easy_brand_list = new String[] {"Яндекс", "Сбер", "Магнит", "Лента", "Роснефть"};
         BrandDictionary.put("easy", easy_brand_list);
-        String[] medium_brand_list = new String[] {"Toyota", "Google", "Amazon", "Microsoft", "Facebook"};
+        String[] medium_brand_list = new String[] {"Аэрофлот", "Тинькофф", "МТС", "ВКонтакте", "Касперский"};
         BrandDictionary.put("medium", medium_brand_list);
-        String[] hard_brand_list = new String[] {"Tesla", "Spotify", "Netflix", "Airbnb", "Uber"};
+        String[] hard_brand_list = new String[] {"Тинькофф Инвестиции", "Wildberries", "Ozon", "Яндекс.Такси", "Авито"};
         BrandDictionary.put("hard", hard_brand_list);
+
     }
 
     public Map<String, String[]> getDictionary(String category) {
-        switch (category.toLowerCase()) {
-            case "animal":
-                return AnimalDictionary;
-            case "film":
-                return FilmDictionary;
-            case "country":
-                return CountryDictionary;
-            case "brand":
-                return BrandDictionary;
-            default:
-                return AnimalDictionary; // Returning default dictionary if category is invalid
-        }
+        return switch (category.toLowerCase()) {
+            case "animal" -> AnimalDictionary;
+            case "film" -> FilmDictionary;
+            case "country" -> CountryDictionary;
+            case "brand" -> BrandDictionary;
+            default -> AnimalDictionary;
+        };
     }
 
     public String gameVisualStages(int attempt, int difficulty) {

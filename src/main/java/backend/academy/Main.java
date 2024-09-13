@@ -5,7 +5,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Main {
     public static void main(String[] args) {
-        gameMenu menu = new gameMenu();
-        menu.start_game();
+        GameMenu menu = new GameMenu();
+        menu.startGame();
     }
 }
