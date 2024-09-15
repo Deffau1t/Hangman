@@ -2,7 +2,9 @@ package backend.academy;
 
 import org.junit.Before;
 import org.junit.Test;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -17,6 +19,7 @@ public class GameTest {
         data = new GameData();
     }
 
+    //Проверка правильности выбора слова из списка
     @Test
     public void randomWordPickCase() {
         String filmHardExample = "некромантия";
@@ -50,6 +53,7 @@ public class GameTest {
         assertFalse(Arrays.asList(secondCaseWords).contains(animalEasyExample));
     }
 
+    //Проверка корректности отображения состояния игры после каждого ввода пользователя
     @Test
     public void CorrectIllustrationCase() {
         game.difficulty(1);
@@ -89,4 +93,27 @@ public class GameTest {
         assertEquals(thirdIllustration, correctThirdIllustration);
     }
 
+    //Проверка, что введенные буквы корректно обрабатываются вне зависимости от их регистра.
+    @Test
+    public void letterRegisterCase() {
+        String answerCase = "ПроВерка";
+
+        List<Integer> firstCorrectIndexList = new ArrayList<>();
+        firstCorrectIndexList.add(2);
+
+        List<Integer> firstResultList = game.foundLetter('о', answerCase);
+        assertEquals(firstResultList, firstCorrectIndexList);
+
+        List<Integer> secondResultList = game.foundLetter('О', answerCase);
+        assertEquals(secondResultList, firstCorrectIndexList);
+
+        List<Integer> secondCorrectIndexList = new ArrayList<>();
+        secondCorrectIndexList.add(1);
+        secondCorrectIndexList.add(5);
+        List<Integer> thirdResultList = game.foundLetter('р', answerCase);
+        assertEquals(thirdResultList, secondCorrectIndexList);
+
+        List<Integer> fourthResultList = game.foundLetter('Р', answerCase);
+        assertEquals(fourthResultList, secondCorrectIndexList);
+    }
 }

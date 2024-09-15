@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GameData {
-    private Map<String, String[]> AnimalDictionary = new HashMap<>();
-    private Map<String, String[]> FilmDictionary = new HashMap<>();
-    private Map<String, String[]> CountryDictionary = new HashMap<>();
-    private Map<String, String[]> BrandDictionary = new HashMap<>();
+    private final Map<String, String[]> AnimalDictionary;
+    private final Map<String, String[]> FilmDictionary;
+    private final Map<String, String[]> CountryDictionary;
+    private final Map<String, String[]> BrandDictionary;
 
     public GameData() {
         // Animal Dictionary
@@ -48,9 +48,9 @@ public class GameData {
 
     }
 
+    //получение подходящего словаря для игры
     public Map<String, String[]> getDictionary(String category) {
         return switch (category.toLowerCase()) {
-            case "animal" -> AnimalDictionary;
             case "film" -> FilmDictionary;
             case "country" -> CountryDictionary;
             case "brand" -> BrandDictionary;

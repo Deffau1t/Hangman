@@ -12,7 +12,7 @@ import java.util.Scanner;
 @Getter
 public class GameLogic {
     private int difficulty = 2;
-    private String category;
+    private String category = "animal";
     private int attempts;
 
     public GameLogic(int difficulty, String category) {
@@ -67,7 +67,9 @@ public class GameLogic {
     public int gameProcess(String answer, GameLogic game_settings) {
         Scanner scanner = new Scanner(System.in);
 
+        //массив угаданных пользователем символов
         char [] user_predicts = new char[answer.length()];
+        //отображаемый список букв для выбора пользователем
         StringBuilder alphabet = new StringBuilder("абвгдеёжзийклмнопрстуфхцчшщъыьэюя");
 
         System.out.print("Your word:");
@@ -75,6 +77,7 @@ public class GameLogic {
 
         while (true) {
             String current_world = new String(user_predicts);
+            //игра заканчивается, когда слово угадано или если попытки закончились
             if (current_world.equalsIgnoreCase(answer) || game_settings.attempts == 0) {
                 break;
             }
@@ -116,11 +119,13 @@ public class GameLogic {
         return attempts;
     }
 
+    //отображение виселицы
     public void drawing(GameLogic game_settings) {
         GameData picture = new GameData();
         System.out.println(picture.gameVisualStages(game_settings.attempts, game_settings.difficulty));
     }
 
+    //отображение угадываемого слова
     public void gameStageIllustration(char [] user_predicts) {
         System.out.println();
         for (char i : user_predicts) {
@@ -134,6 +139,7 @@ public class GameLogic {
         System.out.println("\n");
     }
 
+    //проверка, что вводимое предположение является ответом
     public boolean wordCheck(String answer) {
         Scanner scanner = new Scanner(System.in);
 
@@ -150,6 +156,7 @@ public class GameLogic {
         }
     }
 
+    //проверка, что буква есть в слове
     public void letterCheck(GameLogic game_settings, String answer, char [] user_predicts, StringBuilder alphabet) {
         Scanner scanner = new Scanner(System.in);
 
@@ -168,7 +175,7 @@ public class GameLogic {
 
         List<Integer> ind_list = game_settings.foundLetter(correct_prediction, answer);
         if (!ind_list.isEmpty()) {
-            System.out.println("\nYou God dame right '" + correct_prediction + "' right there");
+            System.out.println("\nYou right, '" + correct_prediction + "' right there");
             for (int index : ind_list) {
                 user_predicts[index] = correct_prediction;
             }
@@ -179,6 +186,7 @@ public class GameLogic {
         alphabet.deleteCharAt(alphabet.indexOf(String.valueOf(correct_prediction)));
     }
 
+    //проверки на ввод во время процесса игры
     public int correctChoice(String number_to_check) throws InvalidNumberChoice {
         if (number_to_check.matches(("-?\\d+"))) {
             int current_choice = Integer.parseInt(number_to_check);
