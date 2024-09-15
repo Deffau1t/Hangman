@@ -2,9 +2,7 @@ package backend.academy;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.math3.analysis.function.Sinh;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -161,7 +159,7 @@ public class GameLogic {
             System.out.print(">");
             try {
                 String prediction = scanner.next();
-                correct_prediction = correctLetterPrediction(prediction);
+                correct_prediction = correctLetterPrediction(prediction, alphabet);
                 break;
             } catch (InvalidLetterException e) {
                 System.out.println(e.message());

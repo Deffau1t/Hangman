@@ -41,9 +41,9 @@ public class GameData {
         BrandDictionary = new HashMap<>();
         String[] easy_brand_list = new String[] {"Яндекс", "Сбер", "Магнит", "Лента", "Роснефть"};
         BrandDictionary.put("easy", easy_brand_list);
-        String[] medium_brand_list = new String[] {"Аэрофлот", "Тинькофф", "МТС", "ВКонтакте", "Касперский"};
+        String[] medium_brand_list = new String[] {"Аэрофлот", "МТС", "Касперский"};
         BrandDictionary.put("medium", medium_brand_list);
-        String[] hard_brand_list = new String[] {"Тинькофф Инвестиции", "Wildberries", "Ozon", "Яндекс.Такси", "Авито"};
+        String[] hard_brand_list = new String[] {"ВКонтакте", "Тинькофф", "Авито"};
         BrandDictionary.put("hard", hard_brand_list);
 
     }
@@ -106,6 +106,53 @@ public class GameData {
                 "      |\n" +
                 "========="
             };
+
+        String[] hangmanStagesMedium = {
+            "=========" + "        \n" + "  |   |\n" + "      |\n" + "      |\n" + "      |\n" + "      |\n" + "=========",
+            "=========" + "        \n" +
+                "  |   |\n" +
+                "  O   |\n" +
+                "      |\n" +
+                "      |\n" +
+                "      |\n" +
+                "=========",
+            "=========" + "       \n" +
+                "  |   |\n" +
+                "  O   |\n" +
+                "  |   |\n" +
+                "      |\n" +
+                "      |\n" +
+                "=========",
+            "=========" + "       \n" +
+                "  |   |\n" +
+                "  O   |\n" +
+                " /|   |\n" +
+                "      |\n" +
+                "      |\n" +
+                "=========",
+            "=========" + "       \n" +
+                "  |   |\n" +
+                "  O   |\n" +
+                " /|\\  |\n" +
+                "      |\n" +
+                "      |\n" +
+                "=========",
+            "=========" + "       \n" +
+                "  |   |\n" +
+                "  O   |\n" +
+                " /|\\  |\n" +
+                " /    |\n" +
+                "      |\n" +
+                "=========",
+            "=========" + "       \n" +
+                "  |   |\n" +
+                "  O   |\n" +
+                " /|\\  |\n" +
+                " / \\  |\n" +
+                "      |\n" +
+                "========="
+        };
+
         String[] hangmanStagesHard = {
             "=========" + "       \n" + "  |   |\n" + "      |\n" + "      |\n" + "      |\n" + "      |\n" + "=========",
             "=========" + "       \n" +
@@ -144,11 +191,14 @@ public class GameData {
                 "      |\n" +
                 "========="
         };
-        if (difficulty == 1 || difficulty == 2) {
+        if (difficulty == 1) {
             return hangmanStagesEasy[hangmanStagesEasy.length - attempt];
         }
+        if (difficulty == 2) {
+            return hangmanStagesMedium[hangmanStagesMedium.length - attempt];
+        }
         else {
-            return hangmanStagesEasy[hangmanStagesHard.length - attempt];
+            return hangmanStagesHard[hangmanStagesHard.length - attempt];
         }
     }
 }
