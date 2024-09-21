@@ -1,13 +1,16 @@
 package backend.academy;
 
-import org.junit.Before;
-import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
 
 public class GameTest {
     private GameLogic game;
@@ -22,23 +25,21 @@ public class GameTest {
     //Проверка правильности выбора слова из списка
     @Test
     public void randomWordPickCase() {
-        String filmHardExample = "некромантия";
-
+        final String FILM_HARD_EXAMPLE = "некромантия";
         game.category("film");
         game.difficulty(3);
         String [] firstCaseWords = game.wordList();
-        assertTrue(Arrays.asList(firstCaseWords).contains(filmHardExample));
+        assertTrue(Arrays.asList(firstCaseWords).contains(FILM_HARD_EXAMPLE));
 
         game.difficulty(2);
         firstCaseWords = game.wordList();
-        assertFalse(Arrays.asList(firstCaseWords).contains(filmHardExample));
+        assertFalse(Arrays.asList(firstCaseWords).contains(FILM_HARD_EXAMPLE));
 
         game.category("animal");
         firstCaseWords = game.wordList();
-        assertFalse(Arrays.asList(firstCaseWords).contains(filmHardExample));
+        assertFalse(Arrays.asList(firstCaseWords).contains(FILM_HARD_EXAMPLE));
 
         String animalEasyExample = "птица";
-
         game.category("animal");
         game.difficulty(1);
         String [] secondCaseWords = game.wordList();
@@ -55,42 +56,44 @@ public class GameTest {
 
     //Проверка корректности отображения состояния игры после каждого ввода пользователя
     @Test
-    public void CorrectIllustrationCase() {
+    public void correctIllustrationCase() {
         game.difficulty(1);
-        game.attempts(3);
+        game.attempts(4);
         String firstIllustration = data.gameVisualStages(game.attempts(), game.difficulty());
-        String correctFirstIllustration = "=========" + "       \n" +
-            "  |   |\n" +
-            "  O   |\n" +
-            " /|\\  |\n" +
-            "      |\n" +
-            "      |\n" +
-            "=========";
+        String floor = "=========";
+        String indent = "       \n";
+        String stageIndent = "  |   |\n";
+        String headIndent = "  O   |\n";
+        String lowGroundIndent = "      |\n";
+        String leftHandIndent = " /|   |\n";
+        String mediumIndent = "  |   |\n";
+        String correctFirstIllustration =
+            floor + indent
+            + stageIndent
+            + headIndent
+            + leftHandIndent
+            + lowGroundIndent
+            + lowGroundIndent
+            + floor;
         assertEquals(firstIllustration, correctFirstIllustration);
 
         game.difficulty(2);
         game.attempts(5);
         String secondIllustration = data.gameVisualStages(game.attempts(), game.difficulty());
-        String correctSecondIllustration = "=========" + "       \n" +
-            "  |   |\n" +
-            "  O   |\n" +
-            "  |   |\n" +
-            "      |\n" +
-            "      |\n" +
-            "=========";
+        String correctSecondIllustration =
+            floor + indent
+            + stageIndent
+            + headIndent
+            + mediumIndent
+            + lowGroundIndent
+            + lowGroundIndent
+            + floor;
         assertEquals(secondIllustration, correctSecondIllustration);
 
         game.difficulty(3);
-        game.attempts(4);
+        game.attempts(5);
         String thirdIllustration = data.gameVisualStages(game.attempts(), game.difficulty());
-        String correctThirdIllustration = "=========" + "       \n" +
-            "  |   |\n" +
-            "  O   |\n" +
-            " /|   |\n" +
-            "      |\n" +
-            "      |\n" +
-            "=========";
-        assertEquals(thirdIllustration, correctThirdIllustration);
+        assertEquals(thirdIllustration, correctSecondIllustration);
     }
 
     //Проверка, что введенные буквы корректно обрабатываются вне зависимости от их регистра.

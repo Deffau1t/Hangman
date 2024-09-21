@@ -1,46 +1,50 @@
 package backend.academy;
 
 import java.util.Scanner;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 
 public class GameMenu {
+    private static final Logger logger = Logger.getLogger(GameMenu.class.getName());
+
     public void startGame() {
         Scanner scanner = new Scanner(System.in);
 
-        int correct_difficulty_choice = 0;
+        int corDifficultyChoice = 0;
         System.out.println("Choose the difficulty of mystery word:");
         System.out.println("1 - easy\n2 - medium\n3 - hard");
-        String difficulty_choice = scanner.next();
+        String difficultyChoice = scanner.next();
 
         //Проверка корректности ввода выбора. Средняя сложность иначе.
         try {
-            correct_difficulty_choice = correctDifficultyChoice(difficulty_choice);
+            corDifficultyChoice = correctDifficultyChoice(difficultyChoice);
         } catch (InvalidNumberChoice e) {
             System.out.println(e.message());
             }
 
-        String correct_category_choice = "";
+        String corCategoryChoice = "";
 
         System.out.println("Choose the category of words:");
-        System.out.println("animal");
-        System.out.println("film");
-        System.out.println("country");
-        System.out.print("brand\n>");
+        System.out.println("-animal");
+        System.out.println("-film");
+        System.out.println("-country");
+        System.out.print("-brand\n>");
 
         //Проверка корректности ввода выбора. Категория животных выставлена иначе.
         try {
-            String category_choice = scanner.next();
-            correct_category_choice = correctCategoryChoice(category_choice);
+            String categoryChoice = scanner.next();
+            corCategoryChoice = correctCategoryChoice(categoryChoice);
 
         } catch (InvalidWordException e) {
             System.out.println(e.message());
         }
 
-        GameLogic game_settings = new GameLogic(correct_difficulty_choice, correct_category_choice);
+        GameLogic gameSettings = new GameLogic(corDifficultyChoice, corCategoryChoice);
         try {
-            String answer = correctAnswer(game_settings.getWord());
+            String answer = correctAnswer(gameSettings.getWord());
             System.out.println("You can start guessing:");
-            if (game_settings.gameProcess(answer, game_settings) > 0) {
+            if (gameSettings.gameProcess(answer, gameSettings) > 0) {
                 System.out.println("Congratulations, you won! My word was " + answer);
             } else {
                 System.out.println("Lucky next time, you lost... My word was " + answer);
@@ -52,43 +56,44 @@ public class GameMenu {
         scanner.close();
     }
 
-    public int correctDifficultyChoice(String number_to_check) throws InvalidNumberChoice {
+    public int correctDifficultyChoice(String numberToCheck) throws InvalidNumberChoice {
         //Проверка, что ввод состоит из чисел
-        if (number_to_check.matches(("-?\\d+"))) {
-            int difficulty_choice = Integer.parseInt(number_to_check);
-            if (difficulty_choice >= 1 && difficulty_choice <= 3) {
-                return difficulty_choice;
+        if (numberToCheck.matches(("-?\\d+"))) {
+            int difficultyChoice = Integer.parseInt(numberToCheck);
+            if (difficultyChoice >= 1 && difficultyChoice <= 3) {
+                return difficultyChoice;
             } else {
-                throw new InvalidNumberChoice("The difficulty need to be in range [1, 3]\nMedium difficulty is set anyway");
+                throw new InvalidNumberChoice("The difficulty need to be in range [1, 3]\n"
+                    + "Medium difficulty is set anyway");
             }
         } else {
             throw new InvalidNumberChoice("The difficulty need to be the integer\nMedium difficulty is set anyway");
         }
     }
 
-    public String correctCategoryChoice(String string_to_check) throws InvalidWordException {
-        if (string_to_check.matches("[a-zA-Z]+")) {
-            if (string_to_check.equals("animal") || string_to_check.equals("film") ||
-                string_to_check.equals("brand") || string_to_check.equals("country")) {
-                return string_to_check;
+    public String correctCategoryChoice(String stringToCheck) throws InvalidWordException {
+        if (stringToCheck.matches("[a-zA-Z]+")) {
+            if (stringToCheck.equals("animal") || stringToCheck.equals("film") ||
+                stringToCheck.equals("brand") || stringToCheck.equals("country")) {
+                return stringToCheck;
             } else {
-                throw new InvalidWordException("The category need to be one of this suggested categories\nAnimal category is set anyway");
+                throw new InvalidWordException("The category need to be one of this suggested categories"
+                    + "\nAnimal category is set anyway");
             }
         } else {
-            throw new InvalidWordException("The category consists only from english letters\nAnimal category is set anyway");
+            throw new InvalidWordException("The category consists only from english letters"
+                + "\nAnimal category is set anyway");
         }
     }
 
-    public String correctAnswer(String answer_to_check) throws InvalidWordException {
-        if (!answer_to_check.isEmpty()) {
-            if (answer_to_check.matches("[а-яА-ЯёЁ]+")) {
-                return answer_to_check;
-            }
-            else {
+    public String correctAnswer(String answerToCheck) throws InvalidWordException {
+        if (!answerToCheck.isEmpty()) {
+            if (answerToCheck.matches("[а-яА-ЯёЁ]+")) {
+                return answerToCheck;
+            } else {
                 throw new InvalidWordException("Unpredictable word");
             }
-        }
-        else {
+        } else {
             throw new InvalidWordException("Incorrect length");
         }
     }

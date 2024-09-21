@@ -4,200 +4,165 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GameData {
-    private final Map<String, String[]> AnimalDictionary;
-    private final Map<String, String[]> FilmDictionary;
-    private final Map<String, String[]> CountryDictionary;
-    private final Map<String, String[]> BrandDictionary;
+    private final Map<String, String[]> animalDictionary;
+    private final Map<String, String[]> filmDictionary;
+    private final Map<String, String[]> countryDictionary;
+    private final Map<String, String[]> brandDictionary;
 
     public GameData() {
+        String easyLevel = "easy";
+        String mediumLevel = "medium";
+        String hardLevel = "hard";
         // Animal Dictionary
-        AnimalDictionary = new HashMap<>();
-        String[] easy_animal_list = new String[] {"корова", "собака", "кошка", "птица", "рыба"};
-        AnimalDictionary.put("easy", easy_animal_list);
-        String[] medium_animal_list = new String[] {"фламинго", "жираф", "кенгуру", "львёнок", "слон"};
-        AnimalDictionary.put("medium", medium_animal_list);
-        String[] hard_animal_list = new String[] {"селезень", "бегемот", "носорог", "енот", "кабан"};
-        AnimalDictionary.put("hard", hard_animal_list);
+        animalDictionary = new HashMap<>();
+        String[] easyAnimalList = new String[] {"корова", "собака", "кошка", "птица", "рыба"};
+        animalDictionary.put(easyLevel, easyAnimalList);
+        String[] mediumAnimalList = new String[] {"фламинго", "жираф", "кенгуру", "львёнок", "слон"};
+        animalDictionary.put(mediumLevel, mediumAnimalList);
+        String[] hardAnimalList = new String[] {"селезень", "бегемот", "носорог", "енот", "кабан"};
+        animalDictionary.put(hardLevel, hardAnimalList);
 
         // Film Dictionary
-        FilmDictionary = new HashMap<>();
-        String[] easy_film_list = new String[] {"фильм", "кино", "актер", "режиссер", "сценарий"};
-        FilmDictionary.put("easy", easy_film_list);
-        String[] medium_film_list = new String[] {"драма", "комедия", "триллер", "фантастика", "боевик"};
-        FilmDictionary.put("medium", medium_film_list);
-        String[] hard_film_list = new String[] {"антология", "некромантия", "авантюра", "метафизика", "абсурдизм"};
-        FilmDictionary.put("hard", hard_film_list);
+        filmDictionary = new HashMap<>();
+        String[] easyFilmList = new String[] {"фильм", "кино", "актер", "режиссер", "сценарий"};
+        filmDictionary.put(easyLevel, easyFilmList);
+        String[] mediumFilmList = new String[] {"драма", "комедия", "триллер", "фантастика", "боевик"};
+        filmDictionary.put(mediumLevel, mediumFilmList);
+        String[] hardFilmList = new String[] {"антология", "некромантия", "авантюра", "метафизика", "абсурдизм"};
+        filmDictionary.put(hardLevel, hardFilmList);
 
         // Country Dictionary
-        CountryDictionary = new HashMap<>();
-        String[] easy_country_list = new String[] {"Россия", "США", "Китай", "Франция", "Германия"};
-        CountryDictionary.put("easy", easy_country_list);
-        String[] medium_country_list = new String[] {"Индия", "Бразилия", "Япония", "Канада", "Аргентина"};
-        CountryDictionary.put("medium", medium_country_list);
-        String[] hard_country_list = new String[] {"Австралия", "Италия", "Мексика", "Испания", "Польша"};
-        CountryDictionary.put("hard", hard_country_list);
+        countryDictionary = new HashMap<>();
+        String[] easyCountryList = new String[] {"Россия", "США", "Китай", "Франция", "Германия"};
+        countryDictionary.put(easyLevel, easyCountryList);
+        String[] mediumCountryList = new String[] {"Индия", "Бразилия", "Япония", "Канада", "Аргентина"};
+        countryDictionary.put(mediumLevel, mediumCountryList);
+        String[] hardCountryList = new String[] {"Австралия", "Италия", "Мексика", "Испания", "Польша"};
+        countryDictionary.put(hardLevel, hardCountryList);
 
         // Brand Dictionary
-        BrandDictionary = new HashMap<>();
-        String[] easy_brand_list = new String[] {"Яндекс", "Сбер", "Магнит", "Лента", "Роснефть"};
-        BrandDictionary.put("easy", easy_brand_list);
-        String[] medium_brand_list = new String[] {"Аэрофлот", "МТС", "Касперский"};
-        BrandDictionary.put("medium", medium_brand_list);
-        String[] hard_brand_list = new String[] {"ВКонтакте", "Тинькофф", "Авито"};
-        BrandDictionary.put("hard", hard_brand_list);
+        brandDictionary = new HashMap<>();
+        String[] easyBrandList = new String[] {"Яндекс", "Сбер", "Магнит", "Лента", "Роснефть"};
+        brandDictionary.put(easyLevel, easyBrandList);
+        String[] mediumBrandList = new String[] {"Аэрофлот", "МТС", "Касперский"};
+        brandDictionary.put(mediumLevel, mediumBrandList);
+        String[] hardBrandList = new String[] {"ВКонтакте", "Тинькофф", "Авито"};
+        brandDictionary.put(hardLevel, hardBrandList);
 
     }
 
     //получение подходящего словаря для игры
     public Map<String, String[]> getDictionary(String category) {
         return switch (category.toLowerCase()) {
-            case "film" -> FilmDictionary;
-            case "country" -> CountryDictionary;
-            case "brand" -> BrandDictionary;
-            default -> AnimalDictionary;
+            case "film" -> filmDictionary;
+            case "country" -> countryDictionary;
+            case "brand" -> brandDictionary;
+            default -> animalDictionary;
         };
     }
 
     public String gameVisualStages(int attempt, int difficulty) {
 
-        // Массив строк для каждой стадии виселицы
+        // Части картины для каждой стадии виселицы
+        String floor = "=========";
+        String indent = "       \n";
+        String stageIndent = "  |   |\n";
+        String headIndent = "  O   |\n";
+        String lowGroundIndent = "      |\n";
+        String handsIndent = " /|\\  |\n";
+        String leftHandIndent = " /|   |\n";
+        String mediumIndent = "  |   |\n";
+        String leftLeg = " /    |\n";
+        String legs = " / \\  |\n";
+
+        String firstStage = floor
+                + indent
+                + stageIndent
+                + lowGroundIndent
+                + lowGroundIndent
+                + lowGroundIndent
+                + lowGroundIndent
+                + floor;
+
+        String easyAdditionalStage = floor
+                + indent
+                + stageIndent
+                + headIndent
+                + lowGroundIndent
+                + lowGroundIndent
+                + lowGroundIndent
+                + floor;
+
+        String secondStage = floor
+                + indent
+                + stageIndent
+                + headIndent
+                + mediumIndent
+                + lowGroundIndent
+                + lowGroundIndent
+                + floor;
+
+        String thirdStage = floor
+                + indent
+                + stageIndent
+                + headIndent
+                + leftHandIndent
+                + lowGroundIndent
+                + lowGroundIndent
+                + floor;
+
+        String fourthStage = floor
+                + indent
+                + stageIndent
+                + headIndent
+                + handsIndent
+                + lowGroundIndent
+                + lowGroundIndent
+                + floor;
+
+        String fifthStage = floor
+                + indent
+                + stageIndent
+                + headIndent
+                + handsIndent
+                + leftLeg
+                + lowGroundIndent
+                + floor;
+
+        String sixthStage = floor
+                + indent
+                + stageIndent
+                + headIndent
+                + handsIndent
+                + legs
+                + lowGroundIndent
+                + floor;
+
         String[] hangmanStagesEasy = {
-            "=========" + "        \n" + "  |   |\n" + "      |\n" + "      |\n" + "      |\n" + "      |\n" + "=========",
-            "=========" + "        \n" +
-                "  |   |\n" +
-                "  O   |\n" +
-                "      |\n" +
-                "      |\n" +
-                "      |\n" +
-                "=========",
-            "=========" + "       \n" +
-                "  |   |\n" +
-                "  O   |\n" +
-                "  |   |\n" +
-                "      |\n" +
-                "      |\n" +
-                "=========",
-            "=========" + "       \n" +
-                "  |   |\n" +
-                "  O   |\n" +
-                " /|   |\n" +
-                "      |\n" +
-                "      |\n" +
-                "=========",
-            "=========" + "       \n" +
-                "  |   |\n" +
-                "  O   |\n" +
-                " /|\\  |\n" +
-                "      |\n" +
-                "      |\n" +
-                "=========",
-            "=========" + "       \n" +
-                "  |   |\n" +
-                "  O   |\n" +
-                " /|\\  |\n" +
-                " /    |\n" +
-                "      |\n" +
-                "=========",
-            "=========" + "       \n" +
-                "  |   |\n" +
-                "  O   |\n" +
-                " /|\\  |\n" +
-                " / \\  |\n" +
-                "      |\n" +
-                "========="
+            firstStage,
+            easyAdditionalStage,
+            secondStage,
+            thirdStage,
+            fourthStage,
+            fifthStage,
+            sixthStage
             };
 
-        String[] hangmanStagesMedium = {
-            "=========" + "        \n" + "  |   |\n" + "      |\n" + "      |\n" + "      |\n" + "      |\n" + "=========",
-            "=========" + "        \n" +
-                "  |   |\n" +
-                "  O   |\n" +
-                "      |\n" +
-                "      |\n" +
-                "      |\n" +
-                "=========",
-            "=========" + "       \n" +
-                "  |   |\n" +
-                "  O   |\n" +
-                "  |   |\n" +
-                "      |\n" +
-                "      |\n" +
-                "=========",
-            "=========" + "       \n" +
-                "  |   |\n" +
-                "  O   |\n" +
-                " /|   |\n" +
-                "      |\n" +
-                "      |\n" +
-                "=========",
-            "=========" + "       \n" +
-                "  |   |\n" +
-                "  O   |\n" +
-                " /|\\  |\n" +
-                "      |\n" +
-                "      |\n" +
-                "=========",
-            "=========" + "       \n" +
-                "  |   |\n" +
-                "  O   |\n" +
-                " /|\\  |\n" +
-                " /    |\n" +
-                "      |\n" +
-                "=========",
-            "=========" + "       \n" +
-                "  |   |\n" +
-                "  O   |\n" +
-                " /|\\  |\n" +
-                " / \\  |\n" +
-                "      |\n" +
-                "========="
-        };
-
         String[] hangmanStagesHard = {
-            "=========" + "       \n" + "  |   |\n" + "      |\n" + "      |\n" + "      |\n" + "      |\n" + "=========",
-            "=========" + "       \n" +
-                "  |   |\n" +
-                "  O   |\n" +
-                "  |   |\n" +
-                "      |\n" +
-                "      |\n" +
-                "=========",
-            "=========" + "       \n" +
-                "  |   |\n" +
-                "  O   |\n" +
-                " /|   |\n" +
-                "      |\n" +
-                "      |\n" +
-                "=========",
-            "=========" + "       \n" +
-                "  |   |\n" +
-                "  O   |\n" +
-                " /|\\  |\n" +
-                "      |\n" +
-                "      |\n" +
-                "=========",
-            "=========" + "       \n" +
-                "  |   |\n" +
-                "  O   |\n" +
-                " /|\\  |\n" +
-                " /    |\n" +
-                "      |\n" +
-                "=========",
-            "=========" + "       \n" +
-                "  |   |\n" +
-                "  O   |\n" +
-                " /|\\  |\n" +
-                " / \\  |\n" +
-                "      |\n" +
-                "========="
-        };
+            firstStage,
+            secondStage,
+            thirdStage,
+            fourthStage,
+            fifthStage,
+            sixthStage
+            };
+
         if (difficulty == 1) {
             return hangmanStagesEasy[hangmanStagesEasy.length - attempt];
         }
         if (difficulty == 2) {
-            return hangmanStagesMedium[hangmanStagesMedium.length - attempt];
-        }
-        else {
+            return hangmanStagesEasy[hangmanStagesEasy.length - attempt];
+        } else {
             return hangmanStagesHard[hangmanStagesHard.length - attempt];
         }
     }
