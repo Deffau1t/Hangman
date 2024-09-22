@@ -66,7 +66,6 @@ public class GameData {
         // Части картины для каждой стадии виселицы
         String floor = "=========";
         String indent = "       \n";
-        //String stageIndent = "  |   |\n";
         String headIndent = "  O   |\n";
         String lowGroundIndent = "      |\n";
         String handsIndent = " /|\\  |\n";

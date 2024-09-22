@@ -21,7 +21,7 @@ public class GameTest {
     }
 
     //Проверка правильности выбора слова из списка
-    @SuppressWarnings("3")
+    @SuppressWarnings("MagicNumber")
     @Test
     public void randomWordPickCase() {
         final String FILM_HARD_EXAMPLE = "некромантия";
@@ -56,7 +56,7 @@ public class GameTest {
     }
 
     //Проверка корректности отображения состояния игры после каждого ввода пользователя
-    @SuppressWarnings({"3", "4", "5"})
+    @SuppressWarnings("MagicNumber")
     @Test
     public void correctIllustrationCase() {
         game.difficulty(1);
@@ -98,7 +98,7 @@ public class GameTest {
     }
 
     //Проверка, что введенные буквы корректно обрабатываются вне зависимости от их регистра.
-    @SuppressWarnings("5")
+    @SuppressWarnings("MagicNumber")
     @Test
     public void letterRegisterCase() {
         String answerCase = "ПроВерка";

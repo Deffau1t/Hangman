@@ -26,7 +26,7 @@ public class GameLogic {
     }
 
     //отбор подходящего списка слов из начального словаря
-    @SuppressWarnings({"3", "6", "7"})
+    @SuppressWarnings("MagicNumber")
     public String[] wordList() {
         GameData dict = new GameData();
         switch (this.difficulty) {

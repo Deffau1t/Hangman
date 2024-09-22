@@ -54,7 +54,7 @@ public class GameMenu {
         scanner.close();
     }
 
-    @SuppressWarnings("3")
+    @SuppressWarnings("MagicNumber")
     public int correctDifficultyChoice(String numberToCheck) throws InvalidNumberChoice {
         //Проверка, что ввод состоит из чисел
         if (numberToCheck.matches(("-?\\d+"))) {
