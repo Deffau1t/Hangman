@@ -3,10 +3,8 @@ package backend.academy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -23,26 +21,29 @@ public class GameTest {
     }
 
     //Проверка правильности выбора слова из списка
+    @SuppressWarnings("3")
     @Test
     public void randomWordPickCase() {
         final String FILM_HARD_EXAMPLE = "некромантия";
+        final int HARD_DIFFICULTY = 3;
+        final String ANIMAL_CATEGORY = "animal";
         game.category("film");
-        game.difficulty(3);
-        String [] firstCaseWords = game.wordList();
+        game.difficulty(HARD_DIFFICULTY);
+        String[] firstCaseWords = game.wordList();
         assertTrue(Arrays.asList(firstCaseWords).contains(FILM_HARD_EXAMPLE));
 
         game.difficulty(2);
         firstCaseWords = game.wordList();
         assertFalse(Arrays.asList(firstCaseWords).contains(FILM_HARD_EXAMPLE));
 
-        game.category("animal");
+        game.category(ANIMAL_CATEGORY);
         firstCaseWords = game.wordList();
         assertFalse(Arrays.asList(firstCaseWords).contains(FILM_HARD_EXAMPLE));
 
         String animalEasyExample = "птица";
-        game.category("animal");
+        game.category(ANIMAL_CATEGORY);
         game.difficulty(1);
-        String [] secondCaseWords = game.wordList();
+        String[] secondCaseWords = game.wordList();
         assertTrue(Arrays.asList(secondCaseWords).contains(animalEasyExample));
 
         game.attempts(3);
@@ -55,6 +56,7 @@ public class GameTest {
     }
 
     //Проверка корректности отображения состояния игры после каждого ввода пользователя
+    @SuppressWarnings({"3", "4", "5"})
     @Test
     public void correctIllustrationCase() {
         game.difficulty(1);
@@ -62,14 +64,13 @@ public class GameTest {
         String firstIllustration = data.gameVisualStages(game.attempts(), game.difficulty());
         String floor = "=========";
         String indent = "       \n";
-        String stageIndent = "  |   |\n";
         String headIndent = "  O   |\n";
         String lowGroundIndent = "      |\n";
         String leftHandIndent = " /|   |\n";
         String mediumIndent = "  |   |\n";
         String correctFirstIllustration =
             floor + indent
-            + stageIndent
+            + mediumIndent
             + headIndent
             + leftHandIndent
             + lowGroundIndent
@@ -82,7 +83,7 @@ public class GameTest {
         String secondIllustration = data.gameVisualStages(game.attempts(), game.difficulty());
         String correctSecondIllustration =
             floor + indent
-            + stageIndent
+            + mediumIndent
             + headIndent
             + mediumIndent
             + lowGroundIndent
@@ -97,6 +98,7 @@ public class GameTest {
     }
 
     //Проверка, что введенные буквы корректно обрабатываются вне зависимости от их регистра.
+    @SuppressWarnings("5")
     @Test
     public void letterRegisterCase() {
         String answerCase = "ПроВерка";

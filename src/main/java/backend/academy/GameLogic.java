@@ -1,11 +1,12 @@
 package backend.academy;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.ArrayList;
+import lombok.Getter;
+import lombok.Setter;
 
 
 @Setter
@@ -14,6 +15,7 @@ public class GameLogic {
     private int difficulty = 2;
     private String category = "animal";
     private int attempts;
+    private PrintStream out = System.out;
 
     public GameLogic(int difficulty, String category) {
         this.difficulty = difficulty;
@@ -24,6 +26,7 @@ public class GameLogic {
     }
 
     //отбор подходящего списка слов из начального словаря
+    @SuppressWarnings({"3", "6", "7"})
     public String[] wordList() {
         GameData dict = new GameData();
         switch (this.difficulty) {
@@ -45,7 +48,7 @@ public class GameLogic {
     // метод для получения случайного слова из списка по заданным параметрам
     public String getWord() {
 
-        String [] chosenWords = wordList();
+        String[] chosenWords = wordList();
         Random randomInd = new Random();
         int indexWord = randomInd.nextInt(chosenWords.length);
         return chosenWords[indexWord];
@@ -68,11 +71,11 @@ public class GameLogic {
         Scanner scanner = new Scanner(System.in);
 
         //массив угаданных пользователем символов
-        char [] userPredicts = new char[answer.length()];
+        char[] userPredicts = new char[answer.length()];
         //отображаемый список букв для выбора пользователем
         StringBuilder alphabet = new StringBuilder("абвгдеёжзийклмнопрстуфхцчшщъыьэюя");
 
-        System.out.print("Your word:");
+        out.print("Your word:");
         gameStageIllustration(userPredicts);
 
         while (true) {
@@ -83,13 +86,13 @@ public class GameLogic {
             }
             drawing(gameSettings);
             for (int ind = 0; ind < alphabet.length(); ind++) {
-                System.out.print(alphabet.charAt(ind) + " ");
+                out.print(alphabet.charAt(ind) + " ");
             }
 
             int correctCurrentGuess;
             while (true) {
-                System.out.println("\n1 - I ready to guess the whole word");
-                System.out.print("2 - I want to guess the letter\n>");
+                out.println("\n1 - I ready to guess the whole word");
+                out.print("2 - I want to guess the letter\n>");
 
                 try {
                     String currentGuess = scanner.next();
@@ -97,7 +100,7 @@ public class GameLogic {
                     break;
 
                 } catch (InvalidNumberChoice e) {
-                    System.out.println(e.message());
+                    out.println(e.message());
                 }
 
             }
@@ -110,10 +113,10 @@ public class GameLogic {
             } else {
                 letterCheck(gameSettings, answer, userPredicts, alphabet);
             }
-            System.out.println("Attempts left: " + attempts);
-            System.out.print("Your guests: ");
+            out.println("Attempts left: " + attempts);
+            out.print("Your guests: ");
             gameStageIllustration(userPredicts);
-            System.out.println();
+            out.println();
         }
         return attempts;
     }
@@ -121,20 +124,20 @@ public class GameLogic {
     //отображение виселицы
     public void drawing(GameLogic gameSettings) {
         GameData picture = new GameData();
-        System.out.println(picture.gameVisualStages(gameSettings.attempts, gameSettings.difficulty));
+        out.println(picture.gameVisualStages(gameSettings.attempts, gameSettings.difficulty));
     }
 
     //отображение угадываемого слова
-    public void gameStageIllustration(char [] userPredicts) {
-        System.out.println();
+    public void gameStageIllustration(char[] userPredicts) {
+        out.println();
         for (char i : userPredicts) {
             if (i == '\0') {
-                System.out.print('_' + " ");
+                out.print('_' + " ");
             } else {
-                System.out.print(i + " ");
+                out.print(i + " ");
             }
         }
-        System.out.println("\n");
+        out.println("\n");
     }
 
     //проверка, что вводимое предположение является ответом
@@ -142,43 +145,43 @@ public class GameLogic {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("Input the word");
-            System.out.print(">");
+            out.println("Input the word");
+            out.print(">");
             try {
                 String wordToGuess = scanner.next();
                 String correctWordToGuess = correctAnswerPrediction(wordToGuess);
                 return correctWordToGuess.equalsIgnoreCase(answer);
             } catch (InvalidWordException e) {
-                System.out.println(e.message());
+                out.println(e.message());
             }
         }
     }
 
     //проверка, что буква есть в слове
-    public void letterCheck(GameLogic gameSettings, String answer, char [] userPredicts, StringBuilder alphabet) {
+    public void letterCheck(GameLogic gameSettings, String answer, char[] userPredicts, StringBuilder alphabet) {
         Scanner scanner = new Scanner(System.in);
 
         char correctPrediction;
         while (true) {
-            System.out.println("Input the letter");
-            System.out.print(">");
+            out.println("Input the letter");
+            out.print(">");
             try {
                 String prediction = scanner.next();
                 correctPrediction = correctLetterPrediction(prediction, alphabet);
                 break;
             } catch (InvalidLetterException e) {
-                System.out.println(e.message());
+                out.println(e.message());
             }
         }
 
         List<Integer> indList = gameSettings.foundLetter(correctPrediction, answer);
         if (!indList.isEmpty()) {
-            System.out.println("\nYou right, '" + correctPrediction + "' right there");
+            out.println("\nYou right, '" + correctPrediction + "' right there");
             for (int index : indList) {
                 userPredicts[index] = correctPrediction;
             }
         } else {
-            System.out.println("\nNice try! " + "there is no '" + correctPrediction + "'");
+            out.println("\nNice try! " + "there is no '" + correctPrediction + "'");
             gameSettings.attempts--;
         }
         alphabet.deleteCharAt(alphabet.indexOf(String.valueOf(correctPrediction)));

@@ -66,7 +66,7 @@ public class GameData {
         // Части картины для каждой стадии виселицы
         String floor = "=========";
         String indent = "       \n";
-        String stageIndent = "  |   |\n";
+        //String stageIndent = "  |   |\n";
         String headIndent = "  O   |\n";
         String lowGroundIndent = "      |\n";
         String handsIndent = " /|\\  |\n";
@@ -77,7 +77,7 @@ public class GameData {
 
         String firstStage = floor
                 + indent
-                + stageIndent
+                + mediumIndent
                 + lowGroundIndent
                 + lowGroundIndent
                 + lowGroundIndent
@@ -86,7 +86,7 @@ public class GameData {
 
         String easyAdditionalStage = floor
                 + indent
-                + stageIndent
+                + mediumIndent
                 + headIndent
                 + lowGroundIndent
                 + lowGroundIndent
@@ -95,7 +95,7 @@ public class GameData {
 
         String secondStage = floor
                 + indent
-                + stageIndent
+                + mediumIndent
                 + headIndent
                 + mediumIndent
                 + lowGroundIndent
@@ -104,7 +104,7 @@ public class GameData {
 
         String thirdStage = floor
                 + indent
-                + stageIndent
+                + mediumIndent
                 + headIndent
                 + leftHandIndent
                 + lowGroundIndent
@@ -113,7 +113,7 @@ public class GameData {
 
         String fourthStage = floor
                 + indent
-                + stageIndent
+                + mediumIndent
                 + headIndent
                 + handsIndent
                 + lowGroundIndent
@@ -122,7 +122,7 @@ public class GameData {
 
         String fifthStage = floor
                 + indent
-                + stageIndent
+                + mediumIndent
                 + headIndent
                 + handsIndent
                 + leftLeg
@@ -131,7 +131,7 @@ public class GameData {
 
         String sixthStage = floor
                 + indent
-                + stageIndent
+                + mediumIndent
                 + headIndent
                 + handsIndent
                 + legs
