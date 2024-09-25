@@ -12,8 +12,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public class GameLogic {
-    private int difficulty = 2;
-    private String category = "animal";
+    private int difficulty;
+    private String category;
     private int attempts;
     private PrintStream out = System.out;
 
@@ -27,31 +27,30 @@ public class GameLogic {
 
     //отбор подходящего списка слов из начального словаря
     @SuppressWarnings("MagicNumber")
-    public String[] wordList() {
+    public List<String> wordList() {
         GameData dict = new GameData();
         switch (this.difficulty) {
             case 3 -> {
                 this.attempts = 6;
-                return dict.getDictionary(this.category).get("hard");
+                return dict.getDictionary(this.category).get(GameData.DifficultyLevel.HARD);
             }
             case 1 -> {
                 this.attempts = 7;
-                return dict.getDictionary(this.category).get("easy");
+                return dict.getDictionary(this.category).get(GameData.DifficultyLevel.EASY);
             }
             default -> {
                 this.attempts = 7;
-                return dict.getDictionary(this.category).get("medium");
+                return dict.getDictionary(this.category).get(GameData.DifficultyLevel.MEDIUM);
             }
         }
     }
 
     // метод для получения случайного слова из списка по заданным параметрам
     public String getWord() {
-
-        String[] chosenWords = wordList();
+        List<String> chosenWords = wordList();
         Random randomInd = new Random();
-        int indexWord = randomInd.nextInt(chosenWords.length);
-        return chosenWords[indexWord];
+        int indexWord = randomInd.nextInt(chosenWords.size());
+        return chosenWords.get(indexWord);
     }
 
     //метод для получения индекса буквы в слове
@@ -63,6 +62,12 @@ public class GameLogic {
             if (answerLowerCase.charAt(i) == letterLowerCase) {
                 res.add(i);
             }
+        }
+        if (!res.isEmpty()) {
+            out.println("\nYou right, '" + letter + "' right there");
+        } else {
+            out.println("\nNice try! " + "there is no '" + letter + "'");
+            attempts--;
         }
         return res;
     }
@@ -81,7 +86,7 @@ public class GameLogic {
         while (true) {
             String currentWorld = new String(userPredicts);
             //игра заканчивается, когда слово угадано или если попытки закончились
-            if (currentWorld.equalsIgnoreCase(answer) || gameSettings.attempts == 0) {
+            if (currentWorld.equalsIgnoreCase(answer) || gameSettings.attempts <= 0) {
                 break;
             }
             drawing(gameSettings);
@@ -104,8 +109,20 @@ public class GameLogic {
                 }
 
             }
+
             if (correctCurrentGuess == 1) {
-                if (wordCheck(answer)) {
+                String correctWordToGuess;
+                while (true) {
+                    out.print("Input the word\n>");
+                    try {
+                        String wordToGuess = scanner.next();
+                        correctWordToGuess = correctAnswerPrediction(wordToGuess);
+                        break;
+                    } catch (InvalidWordException e) {
+                        out.println(e.message());
+                    }
+                }
+                if (wordCheck(answer, correctWordToGuess)) {
                     return attempts;
                 } else {
                     attempts--;
@@ -141,19 +158,12 @@ public class GameLogic {
     }
 
     //проверка, что вводимое предположение является ответом
-    public boolean wordCheck(String answer) {
-        Scanner scanner = new Scanner(System.in);
-
-        while (true) {
-            out.println("Input the word");
-            out.print(">");
-            try {
-                String wordToGuess = scanner.next();
-                String correctWordToGuess = correctAnswerPrediction(wordToGuess);
-                return correctWordToGuess.equalsIgnoreCase(answer);
-            } catch (InvalidWordException e) {
-                out.println(e.message());
-            }
+    public boolean wordCheck(String answer, String userWord) {
+        if(userWord.equalsIgnoreCase(answer)) {
+            return true;
+        } else {
+            attempts --;
+            return false;
         }
     }
 
@@ -176,13 +186,9 @@ public class GameLogic {
 
         List<Integer> indList = gameSettings.foundLetter(correctPrediction, answer);
         if (!indList.isEmpty()) {
-            out.println("\nYou right, '" + correctPrediction + "' right there");
             for (int index : indList) {
                 userPredicts[index] = correctPrediction;
             }
-        } else {
-            out.println("\nNice try! " + "there is no '" + correctPrediction + "'");
-            gameSettings.attempts--;
         }
         alphabet.deleteCharAt(alphabet.indexOf(String.valueOf(correctPrediction)));
     }
