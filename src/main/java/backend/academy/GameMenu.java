@@ -2,9 +2,8 @@ package backend.academy;
 
 import java.io.PrintStream;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
-
+import static backend.academy.GameLogic.getRandomCategory;
 
 public class GameMenu {
     public void startGame() {
@@ -51,13 +50,6 @@ public class GameMenu {
             out.println(e.message());
         }
         scanner.close();
-    }
-
-    public String getRandomCategory() {
-        List<String> categories = List.of("animal", "film", "country", "brand");
-        Random randomInd = new Random();
-        int indexCategory= randomInd.nextInt(categories.size());
-        return categories.get(indexCategory);
     }
 
     @SuppressWarnings("MagicNumber")

@@ -143,29 +143,34 @@ public class GameTest {
     //Состояние игры корректно изменяется при угадывании/не угадывании.
     @Test
     public void gameStageCase() {
-        final int STAGE_CASE_START_ATTEMPTS = 5;
-        game.attempts(STAGE_CASE_START_ATTEMPTS);
+        final int STAGE_CASE_FIRST_ATTEMPTS = 5;
+        final int STAGE_CASE_SECOND_ATTEMPTS = 4;
+        final int STAGE_CASE_THIRD_ATTEMPTS = 3;
+        final int STAGE_CASE_FOURTH_ATTEMPTS = 2;
+        game.attempts(STAGE_CASE_FIRST_ATTEMPTS);
         String answer = "Аргентина";
         game.wordCheck(answer, "Аргинтина");
-        assertEquals(STAGE_CASE_START_ATTEMPTS - 1, game.attempts());
+        assertEquals(STAGE_CASE_SECOND_ATTEMPTS, game.attempts());
 
         game.wordCheck(answer, "Месси");
-        assertEquals(STAGE_CASE_START_ATTEMPTS - 2, game.attempts());
+        assertEquals(STAGE_CASE_THIRD_ATTEMPTS, game.attempts());
 
         game.foundLetter('а', answer);
-        assertEquals(STAGE_CASE_START_ATTEMPTS - 2, game.attempts());
+        assertEquals(STAGE_CASE_THIRD_ATTEMPTS, game.attempts());
 
         game.foundLetter('о', answer);
-        assertEquals(STAGE_CASE_START_ATTEMPTS - 3, game.attempts());
+        assertEquals(STAGE_CASE_FOURTH_ATTEMPTS, game.attempts());
 
         game.wordCheck(answer, "аргентина");
-        assertEquals(STAGE_CASE_START_ATTEMPTS - 3, game.attempts());
+        assertEquals(STAGE_CASE_FOURTH_ATTEMPTS, game.attempts());
     }
 
-    //Проверка, что при отгадывании ввод строки длиной больше чем 1 (опечатка) приводит к повторному вводу, без изменения состояния.
+    //Проверка, что при отгадывании ввод строки длиной больше чем 1 (опечатка) приводит к повторному вводу
+    //без изменения состояния.
     @Test
     public void correctLetterCase() {
-        //На вход функции проверки подается корректная уже буква, поэтому для проверки состояния игры достаточно проверить ее на момент выполнения correctLetterPrediction
+        //На вход функции проверки подается корректная уже буква, поэтому для проверки состояния игры
+        // достаточно проверить ее на момент выполнения correctLetterPrediction
         final int LETTER_CASE_START_ATTEMPTS = 4;
         StringBuilder alphabet = new StringBuilder("абвгдеёжзийклмнопрстуфхцчшщъыьэюя");
         game.attempts(LETTER_CASE_START_ATTEMPTS);

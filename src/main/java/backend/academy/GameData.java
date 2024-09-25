@@ -37,7 +37,7 @@ public class GameData {
         filmDictionary = new HashMap<>();
         filmDictionary.put(DifficultyLevel.EASY, List.of("фильм", "кино", "актер", "режиссер", "сценарий"));
         filmDictionary.put(DifficultyLevel.MEDIUM, List.of("драма", "комедия", "триллер", "фантастика", "боевик"));
-        filmDictionary.put(DifficultyLevel.HARD, List.of("антология", "некромантия", "авантюра", "метафизика", "абсурдизм"));
+        filmDictionary.put(DifficultyLevel.HARD, List.of("антология", "некромантия", "авантюра", "метафизика"));
 
         // Country Dictionary
         countryDictionary = new HashMap<>();
@@ -62,11 +62,15 @@ public class GameData {
         };
     }
 
+    @SuppressWarnings("MagicNumber")
     private static String[] createHangmanStages(int difficulty) {
-        int size = 0;
-        switch (difficulty) {
-            case 1, 2 -> size = 7;
-            case 3 -> size = 6;
+        int size;
+        if (difficulty == 1) {
+            size = 7;
+        } else if (difficulty == 2) {
+            size = 7;
+        } else {
+            size = 6;
         }
         String[] stages = new String[size];
 

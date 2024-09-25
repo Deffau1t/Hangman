@@ -53,6 +53,14 @@ public class GameLogic {
         return chosenWords.get(indexWord);
     }
 
+    // метод для получения случайной категории
+    static String getRandomCategory() {
+        List<String> categories = List.of("animal", "film", "country", "brand");
+        Random randomInd = new Random();
+        int indexCategory = randomInd.nextInt(categories.size());
+        return categories.get(indexCategory);
+    }
+
     //метод для получения индекса буквы в слове
     public List<Integer> foundLetter(char letter, String answer) {
         String answerLowerCase = answer.toLowerCase();
@@ -159,10 +167,10 @@ public class GameLogic {
 
     //проверка, что вводимое предположение является ответом
     public boolean wordCheck(String answer, String userWord) {
-        if(userWord.equalsIgnoreCase(answer)) {
+        if (userWord.equalsIgnoreCase(answer)) {
             return true;
         } else {
-            attempts --;
+            attempts--;
             return false;
         }
     }
