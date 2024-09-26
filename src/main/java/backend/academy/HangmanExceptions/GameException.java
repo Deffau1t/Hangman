@@ -1,4 +1,4 @@
-package backend.academy.hangmanExceptions;
+package backend.academy.HangmanExceptions;
 
 import lombok.Getter;
 

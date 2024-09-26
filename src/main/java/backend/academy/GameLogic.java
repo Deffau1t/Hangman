@@ -115,7 +115,7 @@ public class GameLogic {
                     correctCurrentGuess = correctChoice(currentGuess);
                     break;
 
-                } catch (backend.academy.hangmanExceptions.InvalidNumberChoice e) {
+                } catch (backend.academy.HangmanExceptions.InvalidNumberChoice e) {
                     out.println(e.message());
                 }
             }
@@ -128,7 +128,7 @@ public class GameLogic {
                         String wordToGuess = scanner.next();
                         correctWordToGuess = correctAnswerPrediction(wordToGuess);
                         break;
-                    } catch (backend.academy.hangmanExceptions.InvalidWordException e) {
+                    } catch (backend.academy.HangmanExceptions.InvalidWordException e) {
                         out.println(e.message());
                     }
                 }
@@ -142,8 +142,7 @@ public class GameLogic {
             } else {
                 if (difficulty <= 2) {
                     out.println(getHint(category, answer));
-                }
-                else {
+                } else {
                     out.println("Подсказки не доступны на высокой сложности");
                 }
             }
@@ -196,7 +195,7 @@ public class GameLogic {
                 String prediction = scanner.next();
                 correctPrediction = correctLetterPrediction(prediction, alphabet);
                 break;
-            } catch (backend.academy.hangmanExceptions.InvalidLetterException e) {
+            } catch (backend.academy.HangmanExceptions.InvalidLetterException e) {
                 out.println(e.message());
             }
         }
@@ -211,44 +210,45 @@ public class GameLogic {
     }
 
     //проверки на ввод во время процесса игры
-    @SuppressWarnings("MagicNumbers")
-    public int correctChoice(String numberToCheck) throws backend.academy.hangmanExceptions.InvalidNumberChoice {
+    @SuppressWarnings("MagicNumber")
+    public int correctChoice(String numberToCheck) throws backend.academy.HangmanExceptions.InvalidNumberChoice {
         if (numberToCheck.matches(("-?\\d+"))) {
             int currentChoice = Integer.parseInt(numberToCheck);
             if (currentChoice >= 1 && currentChoice <= 3) {
                 return currentChoice;
             } else {
-                throw new backend.academy.hangmanExceptions.InvalidNumberChoice("Введите число в пределах [1, 3]");
+                throw new backend.academy.HangmanExceptions.InvalidNumberChoice("Введите число в пределах [1, 3]");
             }
         } else {
-            throw new backend.academy.hangmanExceptions.InvalidNumberChoice("Нужно ввести число");
+            throw new backend.academy.HangmanExceptions.InvalidNumberChoice("Нужно ввести число");
         }
     }
 
-    public String correctAnswerPrediction(String stringToCheck) throws backend.academy.hangmanExceptions.InvalidWordException {
+    public String correctAnswerPrediction(String stringToCheck) throws
+        backend.academy.HangmanExceptions.InvalidWordException {
         if (stringToCheck.matches("[а-яА-ЯёЁ]+")) {
             return stringToCheck;
         } else {
-            throw new backend.academy.hangmanExceptions.InvalidWordException("Слово должно состоять из русских букв");
+            throw new backend.academy.HangmanExceptions.InvalidWordException("Слово должно состоять из русских букв");
         }
     }
 
     public char correctLetterPrediction(String charToCheck, StringBuilder alphabet) throws
-        backend.academy.hangmanExceptions.InvalidLetterException {
+        backend.academy.HangmanExceptions.InvalidLetterException {
         if (charToCheck.length() == 1) {
             char actualCharToCheck = charToCheck.toLowerCase().charAt(0);
             if (actualCharToCheck >= 'а' && actualCharToCheck <= 'я' || actualCharToCheck == 'ё') {
                 if (alphabet.indexOf(String.valueOf(actualCharToCheck)) != -1) {
                     return actualCharToCheck;
                 } else {
-                    throw new backend.academy.hangmanExceptions.InvalidLetterException("Уже использовали");
+                    throw new backend.academy.HangmanExceptions.InvalidLetterException("Уже использовали");
                 }
             } else {
                 throw new
-                    backend.academy.hangmanExceptions.InvalidLetterException("Нужно ввести букву из русского алфавита");
+                    backend.academy.HangmanExceptions.InvalidLetterException("Нужно ввести букву из русского алфавита");
             }
         } else {
-            throw new backend.academy.hangmanExceptions.InvalidLetterException("Введите только одну букву");
+            throw new backend.academy.HangmanExceptions.InvalidLetterException("Введите только одну букву");
         }
     }
 
@@ -315,10 +315,13 @@ public class GameLogic {
     }
 
     static String getHint(String category, String answer) {
+        final String FILM = "film";
+        final String COUNTRY = "country";
+        final String BRAND = "brand";
         return switch (category.toLowerCase()) {
-            case "film" -> getFilmHint(answer);
-            case "country" -> getCountryHint(answer);
-            case "brand" -> getBrandHint(answer);
+            case FILM -> getFilmHint(answer);
+            case COUNTRY -> getCountryHint(answer);
+            case BRAND -> getBrandHint(answer);
             default -> getAnimalHint(answer);
         };
     }

@@ -17,7 +17,7 @@ public class GameMenu {
         //Проверка корректности ввода выбора. Средняя сложность иначе.
         try {
             corDifficultyChoice = correctDifficultyChoice(difficultyChoice);
-        } catch (backend.academy.hangmanExceptions.InvalidNumberChoice e) {
+        } catch (backend.academy.HangmanExceptions.InvalidNumberChoice e) {
             out.println(e.message());
         }
 
@@ -33,7 +33,7 @@ public class GameMenu {
         try {
             String categoryChoice = scanner.next();
             corCategoryChoice = correctCategoryChoice(categoryChoice.toLowerCase());
-        } catch (backend.academy.hangmanExceptions.InvalidWordException e) {
+        } catch (backend.academy.HangmanExceptions.InvalidWordException e) {
             out.println(e.message());
         }
 
@@ -45,7 +45,7 @@ public class GameMenu {
             } else {
                 out.println("В следующий раз повезет, вы проиграли :( Я загадал " + answer);
             }
-        } catch (backend.academy.hangmanExceptions.InvalidWordException e) {
+        } catch (backend.academy.HangmanExceptions.InvalidWordException e) {
             out.println(e.message());
         }
         scanner.close();
@@ -53,7 +53,7 @@ public class GameMenu {
 
     @SuppressWarnings("MagicNumber")
     public int correctDifficultyChoice(String numberToCheck) throws
-        backend.academy.hangmanExceptions.InvalidNumberChoice {
+        backend.academy.HangmanExceptions.InvalidNumberChoice {
         //Проверка, что ввод состоит из чисел
         if (numberToCheck.matches(("-?\\d+"))) {
             int difficultyChoice = Integer.parseInt(numberToCheck);
@@ -61,35 +61,35 @@ public class GameMenu {
                 return difficultyChoice;
             } else {
                 throw new
-                    backend.academy.hangmanExceptions.InvalidNumberChoice("Сложность должна быть в пределах [1, 3]\n"
+                    backend.academy.HangmanExceptions.InvalidNumberChoice("Сложность должна быть в пределах [1, 3]\n"
                     + "Тем не менее, выставлена средняя сложность");
             }
         } else {
             throw new
-                backend.academy.hangmanExceptions.InvalidNumberChoice("Нужно было ввести число"
+                backend.academy.HangmanExceptions.InvalidNumberChoice("Нужно было ввести число"
                 + "\nТем не менее, выставлена средняя сложность");
         }
     }
 
     public String correctCategoryChoice(String stringToCheck) throws
-        backend.academy.hangmanExceptions.InvalidWordException {
+        backend.academy.HangmanExceptions.InvalidWordException {
         if (List.of("animal", "film", "country", "brand").contains(stringToCheck)) {
                 return stringToCheck;
         } else {
-            throw new backend.academy.hangmanExceptions.InvalidWordException("Категория не совпадает с предложенными"
+            throw new backend.academy.HangmanExceptions.InvalidWordException("Категория не совпадает с предложенными"
                 + "\nВыбрана случайная категория");
         }
     }
 
-    static String correctAnswer(String answerToCheck) throws backend.academy.hangmanExceptions.InvalidWordException {
+    static String correctAnswer(String answerToCheck) throws backend.academy.HangmanExceptions.InvalidWordException {
         if (!answerToCheck.isEmpty()) {
             if (answerToCheck.matches("[а-яА-ЯёЁ]+")) {
                 return answerToCheck;
             } else {
-                throw new backend.academy.hangmanExceptions.InvalidWordException("Это слово не угадать");
+                throw new backend.academy.HangmanExceptions.InvalidWordException("Это слово не угадать");
             }
         } else {
-            throw new backend.academy.hangmanExceptions.InvalidWordException("Некорректная длина");
+            throw new backend.academy.HangmanExceptions.InvalidWordException("Некорректная длина");
         }
     }
 }
