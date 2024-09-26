@@ -15,7 +15,11 @@ public class GameLogic {
     private int difficulty;
     private String category;
     private int attempts;
-    private PrintStream out = System.out;
+    final static String ANIMAL = "animal";
+    final static String FILM = "film";
+    final static String COUNTRY = "country";
+    final static String BRAND = "brand";
+    private static PrintStream out = System.out;
 
     public GameLogic(int difficulty, String category) {
         this.difficulty = difficulty;
@@ -55,7 +59,7 @@ public class GameLogic {
 
     // метод для получения случайной категории
     static String getRandomCategory() {
-        List<String> categories = List.of("animal", "film", "country", "brand");
+        List<String> categories = List.of(ANIMAL, FILM, COUNTRY, BRAND);
         Random randomInd = new Random();
         int indexCategory = randomInd.nextInt(categories.size());
         return categories.get(indexCategory);
@@ -315,9 +319,6 @@ public class GameLogic {
     }
 
     static String getHint(String category, String answer) {
-        final String FILM = "film";
-        final String COUNTRY = "country";
-        final String BRAND = "brand";
         return switch (category.toLowerCase()) {
             case FILM -> getFilmHint(answer);
             case COUNTRY -> getCountryHint(answer);
