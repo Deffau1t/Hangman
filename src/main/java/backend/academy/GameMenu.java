@@ -11,19 +11,19 @@ public class GameMenu {
         PrintStream out = System.out;
 
         int corDifficultyChoice = 2;
-        out.println("Choose the difficulty of mystery word:");
-        out.println("1 - easy\n2 - medium\n3 - hard");
+        out.println("Выберите сложность игры:");
+        out.println("1 - легкая\n2 - средняя\n3 - сложная");
         String difficultyChoice = scanner.next();
         //Проверка корректности ввода выбора. Средняя сложность иначе.
         try {
             corDifficultyChoice = correctDifficultyChoice(difficultyChoice);
-        } catch (backend.academy.InvalidNumberChoice e) {
+        } catch (backend.academy.hangmanExceptions.InvalidNumberChoice e) {
             out.println(e.message());
         }
 
         String corCategoryChoice = getRandomCategory();
         out.print("""
-                        Choose the category of words:
+                        Выберите и напишите категорию слов из предложенных:
                         -animal
                         -film
                         -country
@@ -33,59 +33,63 @@ public class GameMenu {
         try {
             String categoryChoice = scanner.next();
             corCategoryChoice = correctCategoryChoice(categoryChoice.toLowerCase());
-        } catch (backend.academy.InvalidWordException e) {
+        } catch (backend.academy.hangmanExceptions.InvalidWordException e) {
             out.println(e.message());
         }
 
         GameLogic gameSettings = new GameLogic(corDifficultyChoice, corCategoryChoice);
         try {
             String answer = correctAnswer(gameSettings.getWord());
-            out.println("You can start guessing");
             if (gameSettings.gameProcess(answer, gameSettings) > 0) {
-                out.println("Congratulations, you won! My word was " + answer);
+                out.println("Поздравляю, Вы победили! Я загадал " + answer);
             } else {
-                out.println("Lucky next time, you lost... My word was " + answer);
+                out.println("В следующий раз повезет, вы проиграли :( Я загадал " + answer);
             }
-        } catch (backend.academy.InvalidWordException e) {
+        } catch (backend.academy.hangmanExceptions.InvalidWordException e) {
             out.println(e.message());
         }
         scanner.close();
     }
 
     @SuppressWarnings("MagicNumber")
-    public int correctDifficultyChoice(String numberToCheck) throws backend.academy.InvalidNumberChoice {
+    public int correctDifficultyChoice(String numberToCheck) throws
+        backend.academy.hangmanExceptions.InvalidNumberChoice {
         //Проверка, что ввод состоит из чисел
         if (numberToCheck.matches(("-?\\d+"))) {
             int difficultyChoice = Integer.parseInt(numberToCheck);
             if (difficultyChoice >= 1 && difficultyChoice <= 3) {
                 return difficultyChoice;
             } else {
-                throw new backend.academy.InvalidNumberChoice("The difficulty need to be in range [1, 3]\n"
-                    + "Medium difficulty is set anyway");
+                throw new
+                    backend.academy.hangmanExceptions.InvalidNumberChoice("Сложность должна быть в пределах [1, 3]\n"
+                    + "Тем не менее, выставлена средняя сложность");
             }
         } else {
-            throw new backend.academy.InvalidNumberChoice("The difficulty need to be the integer\nMedium difficulty is set anyway");
+            throw new
+                backend.academy.hangmanExceptions.InvalidNumberChoice("Нужно было ввести число"
+                + "\nТем не менее, выставлена средняя сложность");
         }
     }
 
-    public String correctCategoryChoice(String stringToCheck) throws backend.academy.InvalidWordException {
+    public String correctCategoryChoice(String stringToCheck) throws
+        backend.academy.hangmanExceptions.InvalidWordException {
         if (List.of("animal", "film", "country", "brand").contains(stringToCheck)) {
                 return stringToCheck;
         } else {
-            throw new backend.academy.InvalidWordException("The category need to be one of this suggested categories"
-                + "\nRandom category is set anyway");
+            throw new backend.academy.hangmanExceptions.InvalidWordException("Категория не совпадает с предложенными"
+                + "\nВыбрана случайная категория");
         }
     }
 
-    static String correctAnswer(String answerToCheck) throws backend.academy.InvalidWordException {
+    static String correctAnswer(String answerToCheck) throws backend.academy.hangmanExceptions.InvalidWordException {
         if (!answerToCheck.isEmpty()) {
             if (answerToCheck.matches("[а-яА-ЯёЁ]+")) {
                 return answerToCheck;
             } else {
-                throw new backend.academy.InvalidWordException("Unpredictable word");
+                throw new backend.academy.hangmanExceptions.InvalidWordException("Это слово не угадать");
             }
         } else {
-            throw new backend.academy.InvalidWordException("Incorrect length");
+            throw new backend.academy.hangmanExceptions.InvalidWordException("Некорректная длина");
         }
     }
 }

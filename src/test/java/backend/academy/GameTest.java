@@ -3,9 +3,12 @@ package backend.academy;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
+import static backend.academy.GameLogic.getHint;
+import static backend.academy.GameLogic.getRandomCategory;
 import static backend.academy.GameMenu.correctAnswer;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
@@ -123,7 +126,7 @@ public class GameTest {
     @Test
     public void gameStartCase() {
         //Если во время исполнения ответ не пройдет эту проверку, то игра не запустится
-        assertThrows(backend.academy.InvalidWordException.class, () -> correctAnswer(""));
+        assertThrows(backend.academy.hangmanExceptions.InvalidWordException.class, () -> correctAnswer(""));
     }
 
     //После превышения заданного количества попыток игра всегда возвращает поражение.
@@ -174,10 +177,27 @@ public class GameTest {
         final int LETTER_CASE_START_ATTEMPTS = 4;
         StringBuilder alphabet = new StringBuilder("абвгдеёжзийклмнопрстуфхцчшщъыьэюя");
         game.attempts(LETTER_CASE_START_ATTEMPTS);
-        assertThrows(backend.academy.InvalidLetterException.class, () -> game.correctLetterPrediction("ап", alphabet));
+        assertThrows(backend.academy.hangmanExceptions.InvalidLetterException.class, () -> game.correctLetterPrediction("ап", alphabet));
         assertEquals(LETTER_CASE_START_ATTEMPTS, game.attempts());
 
-        assertThrows(backend.academy.InvalidLetterException.class, () -> game.correctLetterPrediction("tdf", alphabet));
+        assertThrows(backend.academy.hangmanExceptions.InvalidLetterException.class, () -> game.correctLetterPrediction("tdf", alphabet));
         assertEquals(LETTER_CASE_START_ATTEMPTS, game.attempts());
+    }
+
+    //Проверка корректности получения подсказок
+    @Test
+    public void correctGetHintCase() {
+        String firstAnswer = "Мексика";
+        assertEquals("страна с богатой историей майя", getHint("country", firstAnswer));
+
+        String secondAnswer = "Лента";
+        assertEquals("торговая сеть гипермаркетов", getHint("brand", secondAnswer));
+
+        final int HARD_DIFFICULTY = 3;
+        final String ANY_CATEGORY = getRandomCategory();
+        game.difficulty(HARD_DIFFICULTY);
+        game.category(ANY_CATEGORY);
+        String thirdAnswer = game.getWord();
+        assertNull(getHint(game.category(), thirdAnswer));
     }
 }

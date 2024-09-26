@@ -2,12 +2,12 @@ package backend.academy;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import lombok.Getter;
 import lombok.Setter;
-import static backend.academy.GameData.getHint;
 
 @Setter
 @Getter
@@ -72,9 +72,9 @@ public class GameLogic {
             }
         }
         if (!res.isEmpty()) {
-            out.println("\nYou right, '" + letter + "' right there");
+            out.println("\nСовершенно верно, '" + letter + "' есть в слове");
         } else {
-            out.println("\nNice try! " + "there is no '" + letter + "'");
+            out.println("\nНеплохая попытка! " + "в слове нет '" + letter + "'");
             attempts--;
         }
         return res;
@@ -88,7 +88,7 @@ public class GameLogic {
         //отображаемый список букв для выбора пользователем
         StringBuilder alphabet = new StringBuilder("абвгдеёжзийклмнопрстуфхцчшщъыьэюя");
 
-        out.print("Your word:");
+        out.print("Ваше слово:");
         gameStageIllustration(userPredicts);
 
         while (true) {
@@ -105,9 +105,9 @@ public class GameLogic {
             int correctCurrentGuess;
             while (true) {
                 out.print("""
-                        \n1 - I ready to guess the whole word
-                        2 - I want to guess the letter
-                        3 - I want to get a hint
+                        \n1 - Я хочу угадать слово целиком
+                        2 - Я хочу угадать букву
+                        3 - Мне нужна подсказка
                         >""");
 
                 try {
@@ -115,7 +115,7 @@ public class GameLogic {
                     correctCurrentGuess = correctChoice(currentGuess);
                     break;
 
-                } catch (backend.academy.InvalidNumberChoice e) {
+                } catch (backend.academy.hangmanExceptions.InvalidNumberChoice e) {
                     out.println(e.message());
                 }
             }
@@ -123,12 +123,12 @@ public class GameLogic {
             if (correctCurrentGuess == 1) {
                 String correctWordToGuess;
                 while (true) {
-                    out.print("Input the word\n>");
+                    out.print("Введите загаданное слово\n>");
                     try {
                         String wordToGuess = scanner.next();
                         correctWordToGuess = correctAnswerPrediction(wordToGuess);
                         break;
-                    } catch (backend.academy.InvalidWordException e) {
+                    } catch (backend.academy.hangmanExceptions.InvalidWordException e) {
                         out.println(e.message());
                     }
                 }
@@ -137,13 +137,18 @@ public class GameLogic {
                 } else {
                     attempts--;
                 }
-            } else if (correctCurrentGuess == 2){
+            } else if (correctCurrentGuess == 2) {
                 letterCheck(gameSettings, answer, userPredicts, alphabet);
             } else {
-                out.println(getHint(category, answer));
+                if (difficulty <= 2) {
+                    out.println(getHint(category, answer));
+                }
+                else {
+                    out.println("Подсказки не доступны на высокой сложности");
+                }
             }
-            out.println("Attempts left: " + attempts);
-            out.print("Your guests: ");
+            out.println("Осталось попыток: " + attempts);
+            out.print("Угадано: ");
             gameStageIllustration(userPredicts);
             out.println();
         }
@@ -185,13 +190,13 @@ public class GameLogic {
 
         char correctPrediction;
         while (true) {
-            out.println("Input the letter");
+            out.println("Введите букву");
             out.print(">");
             try {
                 String prediction = scanner.next();
                 correctPrediction = correctLetterPrediction(prediction, alphabet);
                 break;
-            } catch (backend.academy.InvalidLetterException e) {
+            } catch (backend.academy.hangmanExceptions.InvalidLetterException e) {
                 out.println(e.message());
             }
         }
@@ -206,42 +211,115 @@ public class GameLogic {
     }
 
     //проверки на ввод во время процесса игры
-    public int correctChoice(String numberToCheck) throws backend.academy.InvalidNumberChoice {
+    @SuppressWarnings("MagicNumbers")
+    public int correctChoice(String numberToCheck) throws backend.academy.hangmanExceptions.InvalidNumberChoice {
         if (numberToCheck.matches(("-?\\d+"))) {
             int currentChoice = Integer.parseInt(numberToCheck);
             if (currentChoice >= 1 && currentChoice <= 3) {
                 return currentChoice;
             } else {
-                throw new backend.academy.InvalidNumberChoice("Choose the number in range [1, 3]");
+                throw new backend.academy.hangmanExceptions.InvalidNumberChoice("Введите число в пределах [1, 3]");
             }
         } else {
-            throw new backend.academy.InvalidNumberChoice("You should input the integer");
+            throw new backend.academy.hangmanExceptions.InvalidNumberChoice("Нужно ввести число");
         }
     }
 
-    public String correctAnswerPrediction(String stringToCheck) throws backend.academy.InvalidWordException {
+    public String correctAnswerPrediction(String stringToCheck) throws backend.academy.hangmanExceptions.InvalidWordException {
         if (stringToCheck.matches("[а-яА-ЯёЁ]+")) {
             return stringToCheck;
         } else {
-            throw new backend.academy.InvalidWordException("It can only consists russian letters");
+            throw new backend.academy.hangmanExceptions.InvalidWordException("Слово должно состоять из русских букв");
         }
     }
 
     public char correctLetterPrediction(String charToCheck, StringBuilder alphabet) throws
-        backend.academy.InvalidLetterException {
+        backend.academy.hangmanExceptions.InvalidLetterException {
         if (charToCheck.length() == 1) {
             char actualCharToCheck = charToCheck.toLowerCase().charAt(0);
             if (actualCharToCheck >= 'а' && actualCharToCheck <= 'я' || actualCharToCheck == 'ё') {
                 if (alphabet.indexOf(String.valueOf(actualCharToCheck)) != -1) {
                     return actualCharToCheck;
                 } else {
-                    throw new backend.academy.InvalidLetterException("Already used");
+                    throw new backend.academy.hangmanExceptions.InvalidLetterException("Уже использовали");
                 }
             } else {
-                throw new backend.academy.InvalidLetterException("It can be only russian letter");
+                throw new
+                    backend.academy.hangmanExceptions.InvalidLetterException("Нужно ввести букву из русского алфавита");
             }
         } else {
-            throw new backend.academy.InvalidLetterException("You should input only one letter");
+            throw new backend.academy.hangmanExceptions.InvalidLetterException("Введите только одну букву");
         }
+    }
+
+    public static String getAnimalHint(String animal) {
+        HashMap<String, String> animalHintsDictionary = new HashMap<>() {{
+            put("корова", "домашнее животное, дающее молоко");
+            put("собака", "верный друг человека");
+            put("кошка", "популярное домашнее животное");
+            put("птица", "может летать");
+            put("рыба", "водное животное");
+            put("фламинго", "розовая птица с длинными ногами");
+            put("жираф", "самое высокое животное на планете");
+            put("кенгуру", "австралийское животное с мешком");
+            put("львёнок", "молодой лев");
+            put("слон", "крупное наземное млекопитающее");
+        }};
+        return animalHintsDictionary.get(animal);
+    }
+
+    public static String getFilmHint(String film) {
+        HashMap<String, String> filmHintsDictionary = new HashMap<>() {{
+            put("фильм", "визуальное искусство");
+            put("кино", "место показа фильмов");
+            put("актер", "человек, играющий роль в фильме");
+            put("режиссер", "человек, который управляет процессом съемки");
+            put("сценарий", "текст для фильма");
+            put("драма", "жанр для слёз");
+            put("комедия", "жанр для смеха");
+            put("триллер", "жанр с напряжением и интригой");
+            put("фантастика", "жанр о вымышленных мирах");
+            put("боевик", "жанр с экшен-сценами");
+        }};
+        return filmHintsDictionary.get(film);
+    }
+
+    public static String getCountryHint(String country) {
+        HashMap<String, String> countryHintsDictionary = new HashMap<>() {{
+            put("Россия", "самая большая страна в мире");
+            put("США", "страна с 50 штатами");
+            put("Китай", "страна с самой большой численностью населения");
+            put("Франция", "страна с Эйфелевой башней");
+            put("Германия", "страна с богатой историей и культурой");
+            put("Австралия", "континент и страна одновременно");
+            put("Италия", "страна пасты и пиццы");
+            put("Мексика", "страна с богатой историей майя");
+            put("Испания", "страна фламенко и корриды");
+            put("Польша", "страна в Центральной Европе");
+        }};
+        return countryHintsDictionary.get(country);
+    }
+
+    public static String getBrandHint(String brand) {
+        HashMap<String, String> brandHintsDictionary = new HashMap<>() {{
+            put("Яндекс", "поисковая система из России");
+            put("Сбер", "крупнейший банк в России");
+            put("Магнит", "сеть супермаркетов");
+            put("Лента", "торговая сеть гипермаркетов");
+            put("Роснефть", "крупная нефтяная компания");
+            put("Аэрофлот", "крупнейшая авиакомпания России");
+            put("МТС", "один из крупных операторов связи");
+            put("Касперский", "известная антивирусная компания");
+        }};
+        return brandHintsDictionary.get(brand);
+    }
+
+    static String getHint(String category, String answer) {
+        return switch (category.toLowerCase()) {
+            case "film" -> getFilmHint(answer);
+            case "country" -> getCountryHint(answer);
+            case "brand" -> getBrandHint(answer);
+            default -> getAnimalHint(answer);
+        };
     }
 }
