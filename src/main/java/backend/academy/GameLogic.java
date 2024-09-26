@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.Scanner;
 import lombok.Getter;
 import lombok.Setter;
-
+import static backend.academy.GameData.getHint;
 
 @Setter
 @Getter
@@ -104,18 +104,20 @@ public class GameLogic {
 
             int correctCurrentGuess;
             while (true) {
-                out.println("\n1 - I ready to guess the whole word");
-                out.print("2 - I want to guess the letter\n>");
+                out.print("""
+                        \n1 - I ready to guess the whole word
+                        2 - I want to guess the letter
+                        3 - I want to get a hint
+                        >""");
 
                 try {
                     String currentGuess = scanner.next();
                     correctCurrentGuess = correctChoice(currentGuess);
                     break;
 
-                } catch (InvalidNumberChoice e) {
+                } catch (backend.academy.InvalidNumberChoice e) {
                     out.println(e.message());
                 }
-
             }
 
             if (correctCurrentGuess == 1) {
@@ -126,7 +128,7 @@ public class GameLogic {
                         String wordToGuess = scanner.next();
                         correctWordToGuess = correctAnswerPrediction(wordToGuess);
                         break;
-                    } catch (InvalidWordException e) {
+                    } catch (backend.academy.InvalidWordException e) {
                         out.println(e.message());
                     }
                 }
@@ -135,8 +137,10 @@ public class GameLogic {
                 } else {
                     attempts--;
                 }
-            } else {
+            } else if (correctCurrentGuess == 2){
                 letterCheck(gameSettings, answer, userPredicts, alphabet);
+            } else {
+                out.println(getHint(category, answer));
             }
             out.println("Attempts left: " + attempts);
             out.print("Your guests: ");
@@ -187,7 +191,7 @@ public class GameLogic {
                 String prediction = scanner.next();
                 correctPrediction = correctLetterPrediction(prediction, alphabet);
                 break;
-            } catch (InvalidLetterException e) {
+            } catch (backend.academy.InvalidLetterException e) {
                 out.println(e.message());
             }
         }
@@ -202,42 +206,42 @@ public class GameLogic {
     }
 
     //проверки на ввод во время процесса игры
-    public int correctChoice(String numberToCheck) throws InvalidNumberChoice {
+    public int correctChoice(String numberToCheck) throws backend.academy.InvalidNumberChoice {
         if (numberToCheck.matches(("-?\\d+"))) {
             int currentChoice = Integer.parseInt(numberToCheck);
-            if (currentChoice >= 1 && currentChoice <= 2) {
+            if (currentChoice >= 1 && currentChoice <= 3) {
                 return currentChoice;
             } else {
-                throw new InvalidNumberChoice("Choose the number in range [1, 2]");
+                throw new backend.academy.InvalidNumberChoice("Choose the number in range [1, 3]");
             }
         } else {
-            throw new InvalidNumberChoice("You should input the integer");
+            throw new backend.academy.InvalidNumberChoice("You should input the integer");
         }
     }
 
-    public String correctAnswerPrediction(String stringToCheck) throws InvalidWordException {
+    public String correctAnswerPrediction(String stringToCheck) throws backend.academy.InvalidWordException {
         if (stringToCheck.matches("[а-яА-ЯёЁ]+")) {
             return stringToCheck;
         } else {
-            throw new InvalidWordException("It can only consists russian letters");
+            throw new backend.academy.InvalidWordException("It can only consists russian letters");
         }
     }
 
-    public char correctLetterPrediction(String charToCheck, StringBuilder alphabet) throws InvalidLetterException {
+    public char correctLetterPrediction(String charToCheck, StringBuilder alphabet) throws
+        backend.academy.InvalidLetterException {
         if (charToCheck.length() == 1) {
-            char actualCharToCheck = charToCheck.charAt(0);
-            if (actualCharToCheck >= 'а' && actualCharToCheck <= 'я' || actualCharToCheck == 'ё'
-            || actualCharToCheck >= 'А' && actualCharToCheck <= 'Я' || actualCharToCheck == 'Ё') {
+            char actualCharToCheck = charToCheck.toLowerCase().charAt(0);
+            if (actualCharToCheck >= 'а' && actualCharToCheck <= 'я' || actualCharToCheck == 'ё') {
                 if (alphabet.indexOf(String.valueOf(actualCharToCheck)) != -1) {
                     return actualCharToCheck;
                 } else {
-                    throw new InvalidLetterException("Already used");
+                    throw new backend.academy.InvalidLetterException("Already used");
                 }
             } else {
-                throw new InvalidLetterException("It can be only russian letter");
+                throw new backend.academy.InvalidLetterException("It can be only russian letter");
             }
         } else {
-            throw new InvalidLetterException("You should input only one letter");
+            throw new backend.academy.InvalidLetterException("You should input only one letter");
         }
     }
 }

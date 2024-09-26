@@ -123,7 +123,7 @@ public class GameTest {
     @Test
     public void gameStartCase() {
         //Если во время исполнения ответ не пройдет эту проверку, то игра не запустится
-        assertThrows(InvalidWordException.class, () -> correctAnswer(""));
+        assertThrows(backend.academy.InvalidWordException.class, () -> correctAnswer(""));
     }
 
     //После превышения заданного количества попыток игра всегда возвращает поражение.
@@ -174,10 +174,10 @@ public class GameTest {
         final int LETTER_CASE_START_ATTEMPTS = 4;
         StringBuilder alphabet = new StringBuilder("абвгдеёжзийклмнопрстуфхцчшщъыьэюя");
         game.attempts(LETTER_CASE_START_ATTEMPTS);
-        assertThrows(InvalidLetterException.class, () -> game.correctLetterPrediction("ап", alphabet));
+        assertThrows(backend.academy.InvalidLetterException.class, () -> game.correctLetterPrediction("ап", alphabet));
         assertEquals(LETTER_CASE_START_ATTEMPTS, game.attempts());
 
-        assertThrows(InvalidLetterException.class, () -> game.correctLetterPrediction("tdf", alphabet));
+        assertThrows(backend.academy.InvalidLetterException.class, () -> game.correctLetterPrediction("tdf", alphabet));
         assertEquals(LETTER_CASE_START_ATTEMPTS, game.attempts());
     }
 }

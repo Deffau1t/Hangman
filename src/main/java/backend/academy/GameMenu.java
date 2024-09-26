@@ -17,7 +17,7 @@ public class GameMenu {
         //Проверка корректности ввода выбора. Средняя сложность иначе.
         try {
             corDifficultyChoice = correctDifficultyChoice(difficultyChoice);
-        } catch (InvalidNumberChoice e) {
+        } catch (backend.academy.InvalidNumberChoice e) {
             out.println(e.message());
         }
 
@@ -33,7 +33,7 @@ public class GameMenu {
         try {
             String categoryChoice = scanner.next();
             corCategoryChoice = correctCategoryChoice(categoryChoice.toLowerCase());
-        } catch (InvalidWordException e) {
+        } catch (backend.academy.InvalidWordException e) {
             out.println(e.message());
         }
 
@@ -46,46 +46,46 @@ public class GameMenu {
             } else {
                 out.println("Lucky next time, you lost... My word was " + answer);
             }
-        } catch (InvalidWordException e) {
+        } catch (backend.academy.InvalidWordException e) {
             out.println(e.message());
         }
         scanner.close();
     }
 
     @SuppressWarnings("MagicNumber")
-    public int correctDifficultyChoice(String numberToCheck) throws InvalidNumberChoice {
+    public int correctDifficultyChoice(String numberToCheck) throws backend.academy.InvalidNumberChoice {
         //Проверка, что ввод состоит из чисел
         if (numberToCheck.matches(("-?\\d+"))) {
             int difficultyChoice = Integer.parseInt(numberToCheck);
             if (difficultyChoice >= 1 && difficultyChoice <= 3) {
                 return difficultyChoice;
             } else {
-                throw new InvalidNumberChoice("The difficulty need to be in range [1, 3]\n"
+                throw new backend.academy.InvalidNumberChoice("The difficulty need to be in range [1, 3]\n"
                     + "Medium difficulty is set anyway");
             }
         } else {
-            throw new InvalidNumberChoice("The difficulty need to be the integer\nMedium difficulty is set anyway");
+            throw new backend.academy.InvalidNumberChoice("The difficulty need to be the integer\nMedium difficulty is set anyway");
         }
     }
 
-    public String correctCategoryChoice(String stringToCheck) throws InvalidWordException {
+    public String correctCategoryChoice(String stringToCheck) throws backend.academy.InvalidWordException {
         if (List.of("animal", "film", "country", "brand").contains(stringToCheck)) {
                 return stringToCheck;
         } else {
-            throw new InvalidWordException("The category need to be one of this suggested categories"
+            throw new backend.academy.InvalidWordException("The category need to be one of this suggested categories"
                 + "\nRandom category is set anyway");
         }
     }
 
-    static String correctAnswer(String answerToCheck) throws InvalidWordException {
+    static String correctAnswer(String answerToCheck) throws backend.academy.InvalidWordException {
         if (!answerToCheck.isEmpty()) {
             if (answerToCheck.matches("[а-яА-ЯёЁ]+")) {
                 return answerToCheck;
             } else {
-                throw new InvalidWordException("Unpredictable word");
+                throw new backend.academy.InvalidWordException("Unpredictable word");
             }
         } else {
-            throw new InvalidWordException("Incorrect length");
+            throw new backend.academy.InvalidWordException("Incorrect length");
         }
     }
 }
